@@ -1,21 +1,29 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');  // Import CORS
+const cors = require('cors');
 const nodemailer = require('nodemailer');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
+// Body-parser middleware
 app.use(bodyParser.json());
 
-// Use CORS middleware
+// CORS middleware
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://centrat.ru'] // Allow requests from your React app
+    origin: ['http://localhost:3000', 'https://centrat.ru'],  // Allow your front-end origins
+    methods: ['GET', 'POST', 'OPTIONS'],  // Allow these methods
+    allowedHeaders: ['Content-Type'],  // Allow these headers
+    credentials: true,  // Include credentials (if needed)
 }));
 
+// Handle preflight (OPTIONS) requests
+app.options('*', cors());  // Respond to preflight requests
+
+// Main route to handle form submission
 app.post('/submit-brief', (req, res) => {
     const formData = req.body;
 
-    // Настройка Nodemailer для отправки письма
+    // Setup Nodemailer for sending email
     const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
@@ -35,16 +43,17 @@ app.post('/submit-brief', (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
-            // Возвращаем ошибку в формате JSON
-            res.status(500).json({ message: 'Error sending email', error: error.toString() }); 
+            // Return error response in JSON
+            res.status(500).json({ message: 'Error sending email', error: error.toString() });
         } else {
             console.log('Email sent: ' + info.response);
-            // Возвращаем успешный ответ в формате JSON
-            res.status(200).json({ message: 'Email sent successfully', response: info.response });  
+            // Return success response in JSON
+            res.status(200).json({ message: 'Email sent successfully', response: info.response });
         }
     });
 });
 
+// Start server
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at port ${port}`);
 });
