@@ -25,11 +25,11 @@ app.post('/submit-brief', (req, res) => {
 
     // Setup Nodemailer for sending email
     const transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
+        host: 'smtp.mail.ru',
+        port: 465,
         auth: {
-            user: 'joanie8@ethereal.email',
-            pass: 'PZXDbQVUCAQ1QRdd3R'
+            user: 'center-at-info@mail.ru',
+            pass: 'BRpGeam2jHCedkgS2pQx'
         }
     });
 
