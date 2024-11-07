@@ -34,8 +34,8 @@ app.post('/submit-brief', (req, res) => {
     });
 
     const mailOptions = {
-        from: 'joanie8@ethereal.email',
-        to: 'L9LLIKA@yandex.ru',
+        from: '"Center-AT" <mail.mailru>',
+        to: 'center-at-info@mail.ru',
         subject: 'Survey Results',
         text: JSON.stringify(formData, null, 2),
     };
